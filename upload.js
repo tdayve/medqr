@@ -1,5 +1,4 @@
 document.getElementById('decode-button').addEventListener('click', (event) => {
-    console.log('Scan QR Code button clicked');
     const fileInput = document.getElementById('file-input');
     const file = fileInput.files[0];
     if (!file) {
@@ -9,11 +8,9 @@ document.getElementById('decode-button').addEventListener('click', (event) => {
 
     const reader = new FileReader();
     reader.onload = function() {
-        console.log('File read successfully');
         const img = new Image();
         img.src = reader.result;
         img.onload = function() {
-            console.log('Image loaded successfully');
             const canvas = document.createElement('canvas');
             const context = canvas.getContext('2d');
             canvas.width = img.width;
@@ -24,7 +21,6 @@ document.getElementById('decode-button').addEventListener('click', (event) => {
             const code = jsQR(imageData.data, imageData.width, imageData.height);
 
             if (code) {
-                console.log('QR code found');
                 const decryptedData = decryptData(code.data);
                 window.location.href = `https://www.medqr.or.ke/result.html?data=${encodeURIComponent(decryptedData)}`;
             } else {
@@ -36,6 +32,11 @@ document.getElementById('decode-button').addEventListener('click', (event) => {
 });
 
 function decryptData(encryptedData) {
-    // Implement your decryption logic here
-    return atob(encryptedData); // Example using Base64 decoding
+    try {
+        const decryptedData = CryptoJS.AES.decrypt(encryptedData, 'encryptionKey').toString(CryptoJS.enc.Utf8);
+        return decryptedData;
+    } catch (error) {
+        console.error('Error decrypting data:', error);
+        return null; // Handle the error or return a default value
+    }
 }
