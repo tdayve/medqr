@@ -5,7 +5,7 @@ document.getElementById('login-form').addEventListener('submit', function(event)
 
     // Simulate authentication (replace this with actual authentication logic)
     if (username === 'doctor' && password === 'password') {
-        window.location.href = 'https://www.medqr.or.ke/upload.html';
+        window.location.href = 'upload.html';
     } else {
         alert('Invalid credentials');
     }
