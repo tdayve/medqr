@@ -1,14 +1,19 @@
-const decode = document.getElementById('decode-button'); // Assuming 'decode-button' is the ID of your button
-decode.addEventListener('click', (event) => {
-    const fileInput = document.getElementById('file-input'); // Assuming 'file-input' is the ID of your file input element
+document.getElementById('decode-button').addEventListener('click', (event) => {
+    console.log('Scan QR Code button clicked');
+    const fileInput = document.getElementById('file-input');
     const file = fileInput.files[0];
-    if (!file) return;
+    if (!file) {
+        alert('Please select a file.');
+        return;
+    }
 
     const reader = new FileReader();
     reader.onload = function() {
+        console.log('File read successfully');
         const img = new Image();
         img.src = reader.result;
         img.onload = function() {
+            console.log('Image loaded successfully');
             const canvas = document.createElement('canvas');
             const context = canvas.getContext('2d');
             canvas.width = img.width;
@@ -19,6 +24,7 @@ decode.addEventListener('click', (event) => {
             const code = jsQR(imageData.data, imageData.width, imageData.height);
 
             if (code) {
+                console.log('QR code found');
                 const decryptedData = decryptData(code.data);
                 window.location.href = `https://www.medqr.or.ke/result.html?data=${encodeURIComponent(decryptedData)}`;
             } else {
